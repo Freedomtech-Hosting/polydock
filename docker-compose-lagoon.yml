@@ -1,0 +1,156 @@
+version: '2.3'
+
+x-lagoon-project:
+  &lagoon-project polydock
+
+x-environment:
+  &default-environment
+    LAGOON_PROJECT: *lagoon-project
+    LAGOON_ROUTE: http://polydock.docker.amazee.io
+    LAGOON_ENVIRONMENT: "local"
+    #XDEBUG_ENABLE: "true"
+
+services:
+  # SERVICE: cli
+  # This is where we'll run the supervisor and artisan queue:work
+  cli:
+    networks:
+      - amazeeio-network
+      - default
+    build:
+      context: .
+      dockerfile: lagoon/cli.dockerfile
+    image: &cli-image polydock-cli 
+    labels:
+      lagoon.type: cli-persistent
+      lagoon.name: cli
+      lagoon.persistent.name: nginx
+      lagoon.persistent: /app/storage
+    volumes:
+      - ./:/app:delegated
+    volumes_from: 
+      - container:amazeeio-ssh-agent
+    environment:
+      << : *default-environment 
+
+  # SERVICE: nginx
+  nginx:
+    networks:
+      - amazeeio-network
+      - default
+    build:
+      context: .
+      dockerfile: lagoon/nginx.dockerfile
+      args:
+        CLI_IMAGE: *cli-image 
+    labels:
+      lagoon.type: nginx-php-persistent
+      lagoon.name: nginx
+      lagoon.persistent: /app/storage
+    environment:
+      << : *default-environment 
+    volumes:
+      - ./:/app:delegated
+    depends_on:
+      - cli
+      - redis
+      - mariadb
+
+
+  # SERVICE: php 
+  php:
+    networks:
+      - amazeeio-network
+      - default
+    build:
+      context: .
+      dockerfile: lagoon/php.dockerfile
+      args:
+        CLI_IMAGE: *cli-image
+    labels:
+      lagoon.type: nginx-php-persistent
+      lagoon.name: nginx
+      lagoon.persistent.name: nginx
+      lagoon.persistent: /app/storage/
+    volumes:
+      - ./:/app:delegated
+    depends_on:
+      - cli
+      - redis
+      - mariadb
+    environment:
+      << : *default-environment 
+
+  # SERVICE: mariadb
+  mariadb:
+    networks:
+      - amazeeio-network
+      - default
+    image: amazeeio/mariadb
+    labels:
+      lagoon.type: mariadb
+
+  # SERVICE: redis
+  redis:
+    networks:
+      - amazeeio-network
+      - default
+    image: amazeeio/redis
+    labels:
+      lagoon.type: redis
+    environment:
+      << : *default-environment 
+
+  # SERVICE: vite 
+  vite:
+    networks:
+      - amazeeio-network
+      - default
+    build:
+      context: .
+      dockerfile: lagoon/vite.dockerfile
+      args:
+        CLI_IMAGE: *cli-image
+    labels:
+      lagoon.type: none
+    volumes:
+      - ./:/app:delegated
+    depends_on:
+      - cli
+      - nginx
+      - php
+      - redis
+      - mariadb
+    environment:
+      VITE: "http://localhost:5173"
+      << : *default-environment 
+    ports:
+      - "5173:5173"
+
+  # SERVICE: worker
+  worker:
+    networks:
+      - amazeeio-network
+      - default
+    build:
+      context: .
+      dockerfile: lagoon/worker.dockerfile
+      args:
+        CLI_IMAGE: *cli-image
+    labels:
+      lagoon.type: worker-persistent
+      lagoon.name: worker
+      lagoon.persistent.name: nginx
+      lagoon.persistent: /app/storage/
+    volumes:
+      - ./:/app:delegated
+    depends_on:
+      - cli
+      - redis
+      - mariadb
+    environment:
+      << : *default-environment
+
+networks:
+  amazeeio-network:
+    external: true

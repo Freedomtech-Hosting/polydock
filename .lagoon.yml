@@ -1,0 +1,13 @@
+docker-compose-yaml: docker-compose-lagoon.yml
+
+lagoon-sync:
+  mariadb:
+    config:
+      hostname: "$MARIADB_HOST"
+      username: "$MARIADB_USERNAME"
+      password: "$MARIADB_PASSWORD"
+      port: "$MARIADB_PORT"
+      database: "$MARIADB_DATABASE"
+  files:
+    config:
+      sync-directory: "/app/storage"

@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Loading environment variables from .env and friends
+source /lagoon/entrypoints/50-dotenv.sh
+
+# Generate some additional enviornment variables
+source /lagoon/entrypoints/55-generate-env.sh
+
+TABLES=`echo "show tables" | mysql -h$DB_HOST -u$DB_USERNAME -p$DB_PASSWORD $DB_DATABASE`
+
+if [ -z "$TABLES" ]; then
+  echo "Loading up a new database"
+  php artisan migrate:fresh --force
+  php artisan db:seed --force
+else
+  php artisan migrate --force
+  echo "There is already a database loaded up"
+fi
+
