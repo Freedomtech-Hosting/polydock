@@ -47,26 +47,32 @@ fix-permissions /app/storage/debugbar
 
 cd /app
 
-php artisan config:clear
-php artisan cache:clear
-php artisan route:clear
-php artisan view:clear
-php artisan event:clear
+if [ -f "/app/vendor/autoload.php" ]; then
+	echo "Cmposer autoload detected... we're ready to run artisan tooling!"
+	
+	php artisan config:clear
+	php artisan cache:clear
+	php artisan route:clear
+	php artisan view:clear
+	php artisan event:clear
 
-if [ "$LAGOON_ENVIRONMENT_TYPE" == "production" ]; then
-    php artisan config:cache
-    php artisan route:cache
-    php artisan view:cache
-    php artisan event:cache
-elif [ "$SERVICE_NAME" == "cli" ]; then
-    TABLES=`echo "show tables" | mysql -h$DB_HOST -u$DB_USERNAME -p$DB_PASSWORD $DB_DATABASE`
+	if [ "$LAGOON_ENVIRONMENT_TYPE" == "production" ]; then
+	    php artisan config:cache
+	    php artisan route:cache
+	    php artisan view:cache
+	    php artisan event:cache
+	elif [ "$SERVICE_NAME" == "cli" ]; then
+	    TABLES=`echo "show tables" | mysql -h$DB_HOST -u$DB_USERNAME -p$DB_PASSWORD $DB_DATABASE`
 
-    if [ -z "$TABLES" ]; then
-      echo "Loading up a new database"
-      php artisan migrate:fresh --force
-      php artisan db:seed --force
-    else
-      php artisan migrate --force
-      echo "There is already a database loaded up"
-    fi
+	    if [ -z "$TABLES" ]; then
+	      echo "Loading up a new database"
+	      php artisan migrate:fresh --force
+	      php artisan db:seed --force
+	    else
+	      php artisan migrate --force
+	      echo "There is already a database loaded up"
+	    fi
+	fi
+else
+	echo "No composer autoload detected... maybe composer install is not complete?"
 fi
