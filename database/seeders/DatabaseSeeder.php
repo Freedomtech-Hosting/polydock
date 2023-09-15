@@ -14,8 +14,5 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(PolydockLagoonClusterSeeder::class);
-        $this->call(PolydockAppTypeSeeder::class);
-        $this->call(PolydockUserSeeder::class);
-        $this->call(PolydockUserLightningSeeder::class);
     }
 }

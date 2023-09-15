@@ -6,7 +6,7 @@ use App\Models\PolydockAppType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class PolydockAppTypeSeeder extends Seeder
+class PolydockAppTypeFTSeeder extends Seeder
 {
     /**
      * Run the database seeds.

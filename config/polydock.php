@@ -3,7 +3,7 @@
 return [
     'ui' => [
         'theme' => [
-            'logoSquare' => env('POLYDOCK_UI_THEME_LOGO_SQUARE', '/polydock-assets/theme/amboss/amboss-square.png'),
+            'logoSquare' => env('POLYDOCK_UI_THEME_LOGO_SQUARE', '/polydock-assets/theme/aio/aio-square.png'),
         ],
     ],
     'engines' => [
@@ -16,6 +16,9 @@ return [
         ],
         'Fedimint' => [
             'lagoonProjectPrefix' => env('POLYDOC_PROJECT_PREFIX_FEDIMINT', env('POLYDOC_PROJECT_PREFIX', 'polydocdev-fm')),
+        ],
+        'D10Demo' => [
+            'lagoonProjectPrefix' => env('POLYDOC_PROJECT_PREFIX_D10DEMO', env('POLYDOC_PROJECT_PREFIX', 'polydocdev-d10demo')),
         ],
     ]
 ];
