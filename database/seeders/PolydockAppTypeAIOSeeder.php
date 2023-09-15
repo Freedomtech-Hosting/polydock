@@ -18,8 +18,10 @@ class PolydockAppTypeAIOSeeder extends Seeder
             "description" => "Get an amazee.io Drupal 10 demo instance",
             "icon_path" => "/polydock-assets/engines/d10demo/app-icon.png",
             "engine_name" => "D10Demo",
-            "giturl" => "https://github.com/lagoon-examples/drupal10-base.git",
-            "default_deploy_branch" => "main"
+            "giturl" => "git@github.com:lagoon-examples/drupal10-base.git",
+            "default_deploy_branch" => "main",
+            "create_app_fork" => TRUE,
+            "fork_org" => "FreedomTech-Hosting"
         ]);
     }
 }

@@ -23,4 +23,6 @@ interface AppEngineInterface {
     public function updateOrCreateLagoonDeploymentDetailsByDeploymentName(PolydockAppInstance $instance, $deploymentName) : bool;
 
     public function validateNewRequest(Request $request);
+
+    public function createVariablesFromRequest(PolydockAppInstance $instance, Request $request) : bool;
 }

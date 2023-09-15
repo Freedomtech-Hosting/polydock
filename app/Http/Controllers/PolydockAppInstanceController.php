@@ -51,9 +51,7 @@ class PolydockAppInstanceController extends Controller
             'polydock_app_type_id' => $polydockAppType->id,
         ]);
 
-        $appInstance->setVariableValue('LND_ALIAS', $request->get('polydock_var_lnd_alias'));
-        $appInstance->setVariableValue('BITCOIN_NETWORK', $request->get('polydock_var_bitcoin_network'));
-        $appInstance->setVariableValue('LND_WALLETPASSWORD', $request->get('polydock_var_lnd_wallet_password'));
+        $appEngine->createVariablesFromRequest($appInstance, $request);
 
         PolydockAppInstanceReadyForLagoonCreation::dispatch($appInstance);
 

@@ -8,6 +8,8 @@ use Closure;
 use Illuminate\Support\Str;
 use Exception;
 use Illuminate\Validation\Rule;
+use Illuminate\Http\Request;
+
 
 abstract class BaseAppEngine implements AppEngineInterface {
     protected $config = [];
@@ -75,6 +77,11 @@ abstract class BaseAppEngine implements AppEngineInterface {
 
         $instance->save();
 
+        if($instance->polydockAppType->create_app_fork) {
+            $instance->logDebug("App fork setting detected... creating a new fork");
+        }
+
+        return false;
 
         return $ping;
     }
@@ -403,5 +410,10 @@ abstract class BaseAppEngine implements AppEngineInterface {
                 'exists:' . PolydockLagoonCluster::class . ',id'
             ]
         ];
+    }
+
+    public function createVariablesFromRequest(PolydockAppInstance $instance, Request $request) : bool {
+        $instance->setVariableValue('POLYDOCK_ENGINE_NAME',static::POLYDOCK_ENGINE_NAME);
+        return TRUE;
     }
 }

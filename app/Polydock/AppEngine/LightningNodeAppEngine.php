@@ -69,4 +69,12 @@ class LightningNodeAppEngine extends BaseAppEngine implements AppEngineInterface
             ]
         ]));   
     }
+
+    public function createVariablesFromRequest(PolydockAppInstance $instance, Request $request) : bool {
+        $instance->setVariableValue('LND_ALIAS', $request->get('polydock_var_lnd_alias'));
+        $instance->setVariableValue('BITCOIN_NETWORK', $request->get('polydock_var_bitcoin_network'));
+        $instance->setVariableValue('LND_WALLETPASSWORD', $request->get('polydock_var_lnd_wallet_password'));
+
+        return TRUE;
+    }
 }
