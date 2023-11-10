@@ -1,5 +1,5 @@
 # polydock
-A Laravel Application to manage tenanted systems deployed to Laoon
+A Laravel Application to manage tenanted systems deployed to Lagoon
 
 
 # Icon Attributes
