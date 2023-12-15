@@ -77,11 +77,9 @@ abstract class BaseAppEngine implements AppEngineInterface {
 
         $instance->save();
 
-        if($instance->polydockAppType->create_app_fork) {
-            $instance->logDebug("App fork setting detected... creating a new fork");
+        if($instance->polydockAppType->own_git) {
+            $instance->logDebug("Own git clone setting detected... creating a new fork");
         }
-
-        return false;
 
         return $ping;
     }

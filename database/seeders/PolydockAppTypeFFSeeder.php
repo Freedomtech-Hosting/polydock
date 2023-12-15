@@ -6,7 +6,7 @@ use App\Models\PolydockAppType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class PolydockAppTypeAIOSeeder extends Seeder
+class PolydockAppTypeFFSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -20,8 +20,9 @@ class PolydockAppTypeAIOSeeder extends Seeder
             "engine_name" => "D10Demo",
             "giturl" => "git@github.com:lagoon-examples/drupal10-base.git",
             "default_deploy_branch" => "main",
-            "create_app_fork" => TRUE,
-            "fork_org" => "FreedomTech-Hosting"
+            "own_git" => TRUE,
+            "own_git_org" => "FreedomTech-Hosting",
+            "own_git_engine" => "GitHub",
         ]);
     }
 }

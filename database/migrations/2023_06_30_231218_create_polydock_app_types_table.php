@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string("icon_path")->default("/polydock-assets/engines/app-icon.jpg");
             $table->string("giturl")->nullable();
             $table->string("default_deploy_branch")->default("main");
-            $table->boolean("create_app_fork")->default(false);
-            $table->string("fork_org")->nullable();
+            $table->boolean("own_git")->default(false);
+            $table->string("own_git_org")->nullable();
+            $table->string("own_git_engine")->nullable();
             $table->timestamps();
         });
     }
